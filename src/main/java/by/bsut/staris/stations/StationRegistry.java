@@ -2,6 +2,7 @@ package by.bsut.staris.stations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Comparator;
 
 /** Справочник станций Гомельского отделения Белорусской железной дороги. */
 public final class StationRegistry {
@@ -78,5 +79,13 @@ public final class StationRegistry {
         return stations.stream()
                 .filter(station -> station.name().equalsIgnoreCase(searchName))
                 .findFirst();
+    }
+
+    /** Возвращает станции по расстоянию, при равенстве — по наименованию. */
+    public List<Station> sortedByDistance() {
+        return stations.stream()
+                .sorted(Comparator.comparingInt(Station::distanceFromGomelKm)
+                        .thenComparing(Station::name))
+                .toList();
     }
 }
