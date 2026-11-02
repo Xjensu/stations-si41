@@ -68,10 +68,8 @@ class StationRegistryTest {
         assertEquals(12, kostyukovka.distanceFromGomelKm());
     }
 
-    @Test
-
     // тесты новых станций и методов добавляются в конец класса
-
+    @Test
     @DisplayName("Справочник содержит станцию Речица с корректными атрибутами")
     void containsRechitsa() {
         Station rechitsa = station("Речица");
@@ -224,7 +222,6 @@ class StationRegistryTest {
         assertEquals(111, registry.distanceBetween("Гомель-Сортировочный", "Рогачёв"));
         assertEquals(113, registry.distanceBetween("Гомель-Пассажирский", "Рогачёв"));
     }
-
     @Test
     @DisplayName("Станции разных направлений с похожими названиями направлений выбрасывают исключение")
     void distanceBetweenRejectsDifferentLinesWithoutGomelPassenger() {
@@ -299,7 +296,7 @@ class StationRegistryTest {
         assertEquals(25, demehi.distanceFromGomelKm());
     }
 
-        @Test
+    @Test
     @DisplayName("toMarkdownTable формирует таблицу со всеми станциями из STATIONS.md")
     void toMarkdownTableMatchesFileContent() throws Exception {
         String fileContent = java.nio.file.Files.readString(java.nio.file.Path.of("STATIONS.md"));
@@ -344,5 +341,30 @@ class StationRegistryTest {
             assertTrue(table.contains("| " + s.name() + " |"));
         }
     }
+
+     @Test
+    @DisplayName("findByLine возвращает станции заданного направления")
+    void findByLineReturnsMatchingStations() {
+        List<Station> gomelZhIobin = registry.findByLine(Line.GOMEL_ZHLOBIN);
+        assertFalse(gomelZhIobin.isEmpty());
+        assertTrue(gomelZhIobin.stream().allMatch(s -> s.line() == Line.GOMEL_ZHLOBIN));
+        assertTrue(gomelZhIobin.stream().anyMatch(s -> s.name().equals("Гомель-Пассажирский")));
+    }
+
+    @Test
+    @DisplayName("findByLine возвращает пустой список, если станций такого направления нет")
+    void findByLineReturnsEmptyListForMissingLine() {
+        StationRegistry singleStation = new StationRegistry(
+                List.of(new Station("Тестовая", Line.GOMEL_ZHLOBIN, StationType.INTERMEDIATE, 7)));
+        assertTrue(singleStation.findByLine(Line.GOMEL_ELSK).isEmpty());
+    }
+
+    @Test
+    @DisplayName("findByLine выбрасывает IllegalArgumentException для null")
+    void findByLineThrowsForNull() {
+        assertThrows(IllegalArgumentException.class, () -> registry.findByLine(null));
+    }
+
+
 }
 
