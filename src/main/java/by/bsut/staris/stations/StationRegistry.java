@@ -23,11 +23,13 @@ public final class StationRegistry {
             new Station("Гомель-Сортировочный", Line.GOMEL_ZHLOBIN, StationType.MARSHALLING, 2),
             new Station("Рогачёв", Line.GOMEL_ZHLOBIN, StationType.INTERMEDIATE, 113),
             new Station("Новобелицкая", Line.GOMEL_HORNOSTAIVKA, StationType.INTERMEDIATE, 49),
-            new Station ("Словечно", Line.KALINKOVICHI_SLOVECHNO, StationType.FREIGHT, 199)
+            new Station ("Словечно", Line.KALINKOVICHI_SLOVECHNO, StationType.FREIGHT, 199),
+            new Station("Красный Берег", Line.GOMEL_MINSK, StationType.INTERMEDIATE, 104),
+            new Station("Тереховка", Line.GOMEL_BAKHMACH, StationType.INTERMEDIATE, 42),
+            new Station("Демехи", Line.GOMEL_KALINKOVICHI, StationType.INTERMEDIATE, 25)
             // новые станции добавляются в конец списка
         );
     }
-
 
     /** Возвращает все станции справочника. */
     public List<Station> all() {
@@ -77,7 +79,24 @@ public final class StationRegistry {
                 .findFirst();
     }
 
-     /** Возвращает станции заданного направления. */
+        /** Формирует таблицу станций в формате файла STATIONS.md.*/
+        public String toMarkdownTable() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("| Станция | Направление | Тип | Расстояние от Гомеля, км |\n");
+        sb.append("| --- | --- | --- | --- |\n");
+        
+        for (Station s : stations) {
+            sb.append("| ").append(s.name())
+              .append(" | ").append(s.line())
+              .append(" | ").append(s.type())
+              .append(" | ").append(s.distanceFromGomelKm())
+              .append(" |\n");
+        }
+        return sb.toString().trim();
+
+    }
+
+    /** Возвращает станции заданного направления. */
     public List<Station> findByLine(Line line) {
         if (line == null) {
             throw new IllegalArgumentException("Направление не может быть null");
