@@ -105,4 +105,17 @@ public final class StationRegistry {
                 .filter(station -> station.line() == line)
                 .toList();
     }
+
+    /**Возвращает наименования станций с заданным префиксом без учёта регистра,*/
+    public List<String> namesStartingWith(String prefix) {
+        if (prefix == null) {
+            throw new IllegalArgumentException("Префикс не может быть null");
+        }
+        String searchPrefix = prefix.trim().toLowerCase();
+        return stations.stream()
+                .map(Station::name)
+                .filter(name -> name.toLowerCase().startsWith(searchPrefix))
+                .sorted()
+                .toList();
+    }
 }
