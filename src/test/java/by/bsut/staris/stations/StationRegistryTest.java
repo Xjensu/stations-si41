@@ -367,6 +367,30 @@ class StationRegistryTest {
         assertThrows(IllegalArgumentException.class, () -> registry.findByLine(null));
     }
 
+
+    @Test
+    @DisplayName("namesStartingWith возвращает станции с заданным префиксом без учета регистра")
+    void namesStartingWithReturnsMatchingStations() {
+        List<String> result = registry.namesStartingWith("гОм");
+        assertEquals(2, result.size());
+        assertTrue(result.contains("Гомель-Пассажирский"));
+        assertTrue(result.contains("Гомель-Сортировочный"));
+    }
+
+    @Test
+    @DisplayName("namesStartingWith возвращает пустой список, если совпадений нет")
+    void namesStartingWithReturnsEmptyListWhenNoMatches() {
+        List<String> result = registry.namesStartingWith("НесуществующаяСтанция");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("namesStartingWith выбрасывает IllegalArgumentException для null")
+    void namesStartingWithThrowsForNull() {
+        assertThrows(IllegalArgumentException.class, () -> registry.namesStartingWith(null));
+    }
+
+    
     @Test
     @DisplayName("sortedByDistance возвращает станции по возрастанию расстояния")
     void sortedByDistanceOrdersCorrectly() {
