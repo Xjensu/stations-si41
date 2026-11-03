@@ -110,6 +110,18 @@ public final class StationRegistry {
                 .toList();
     }
 
+   /**Возвращает наименования станций с заданным префиксом без учёта регистра,*/
+    public List<String> namesStartingWith(String prefix) {
+        if (prefix == null) {
+            throw new IllegalArgumentException("Префикс не может быть null");
+        }
+        String searchPrefix = prefix.trim().toLowerCase();
+        return stations.stream()
+                .map(Station::name)
+                .filter(name -> name.toLowerCase().startsWith(searchPrefix))
+                .sorted()
+                .toList();
+    }
     public List<Station> sortedByDistance() {
      return stations.stream()
              .sorted(Comparator.comparingInt(Station::distanceFromGomelKm)
