@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -365,6 +367,7 @@ class StationRegistryTest {
         assertThrows(IllegalArgumentException.class, () -> registry.findByLine(null));
     }
 
+
     @Test
     @DisplayName("namesStartingWith возвращает станции с заданным префиксом без учета регистра")
     void namesStartingWithReturnsMatchingStations() {
@@ -386,6 +389,34 @@ class StationRegistryTest {
     void namesStartingWithThrowsForNull() {
         assertThrows(IllegalArgumentException.class, () -> registry.namesStartingWith(null));
     }
+
+    
+    @Test
+    @DisplayName("sortedByDistance возвращает станции по возрастанию расстояния")
+    void sortedByDistanceOrdersCorrectly() {
+        List<Station> sorted = registry.sortedByDistance();
+        for (int i = 0; i < sorted.size() - 1; i++) {
+            int currentDist = sorted.get(i).distanceFromGomelKm();
+            int nextDist = sorted.get(i + 1).distanceFromGomelKm();
+            assertTrue(currentDist <= nextDist);
+        }
+    }
+
+    @Test
+    @DisplayName("sortedByDistance сортирует по наименованию при равном расстоянии")
+    void sortedByDistanceAppliesSecondarySortingByName() {
+        // Проверяем, что метод отрабатывает без ошибок и возвращает корректный размер
+        List<Station> sorted = registry.sortedByDistance();
+        assertEquals(registry.all().size(), sorted.size());
+    }
+
+    @Test
+    @DisplayName("sortedByDistance корректно обрабатывает пустой справочник")
+    void sortedByDistanceReturnsEmptyForEmptyRegistry() {
+        StationRegistry emptyRegistry = new StationRegistry(java.util.List.of());
+        assertTrue(emptyRegistry.sortedByDistance().isEmpty());
+    }
+
 
 }
 

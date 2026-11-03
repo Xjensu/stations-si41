@@ -3,6 +3,10 @@ package by.bsut.staris.stations;
 import java.util.List;
 import java.util.Optional;
 
+
+
+import java.util.Comparator;
+
 /** Справочник станций Гомельского отделения Белорусской железной дороги. */
 public final class StationRegistry {
    
@@ -106,7 +110,7 @@ public final class StationRegistry {
                 .toList();
     }
 
-    /**Возвращает наименования станций с заданным префиксом без учёта регистра,*/
+   /**Возвращает наименования станций с заданным префиксом без учёта регистра,*/
     public List<String> namesStartingWith(String prefix) {
         if (prefix == null) {
             throw new IllegalArgumentException("Префикс не может быть null");
@@ -118,4 +122,10 @@ public final class StationRegistry {
                 .sorted()
                 .toList();
     }
+    public List<Station> sortedByDistance() {
+     return stations.stream()
+             .sorted(Comparator.comparingInt(Station::distanceFromGomelKm)
+                     .thenComparing(Station::name))
+             .toList();
+ }
 }
