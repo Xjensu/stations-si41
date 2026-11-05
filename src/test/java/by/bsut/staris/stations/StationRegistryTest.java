@@ -417,6 +417,15 @@ class StationRegistryTest {
         assertTrue(emptyRegistry.sortedByDistance().isEmpty());
     }
 
+    @Test
+    @DisplayName("Справочник содержит станцию Житковичи с корректными атрибутами")
+    void containsZhitkovichi() {
+        Station zhitkovichi = station("Житковичи");
+        assertEquals(Line.LUNINETS_KALINKOVICHI, zhitkovichi.line());
+        assertEquals(StationType.INTERMEDIATE, zhitkovichi.type());
+        assertEquals(215, zhitkovichi.distanceFromGomelKm());
+    }
+
 
 }
 
