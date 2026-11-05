@@ -138,12 +138,14 @@ class StationRegistryTest {
         assertEquals(113, rogachev.distanceFromGomelKm());
     }
     
-    
-
     @Test
     @DisplayName("farthest возвращает станцию с максимальным расстоянием от Гомеля")
     void farthestReturnsMostDistantStation() {
-        assertEquals("Словечно", registry.farthest().orElseThrow().name());
+        int maxDistance = registry.all().stream()
+                .mapToInt(Station::distanceFromGomelKm)
+                .max()
+                .orElseThrow();
+        assertEquals(maxDistance, registry.farthest().orElseThrow().distanceFromGomelKm());
     }
 
     @Test
