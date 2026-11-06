@@ -428,6 +428,42 @@ class StationRegistryTest {
         assertEquals(215, zhitkovichi.distanceFromGomelKm());
     }
 
+    @Test
+    @DisplayName("farthest согласован с максимумом расстояний по всему справочнику")
+    void farthestIsConsistentWithMaxDistance() {
+        int maxDistance = registry.all().stream()
+                .mapToInt(Station::distanceFromGomelKm)
+                .max()
+                .orElseThrow();
+        assertEquals(maxDistance, registry.farthest().orElseThrow().distanceFromGomelKm());
+    }
+
+    @Test
+    @DisplayName("farthest не выбирает Гомель-Пассажирский (0 км), если есть удалённые станции")
+    void farthestDoesNotReturnGomelPassenger() {
+        Station farthest = registry.farthest().orElseThrow();
+        assertTrue(farthest.distanceFromGomelKm() > 0);
+        assertFalse(farthest.name().equals("Гомель-Пассажирский"));
+    }
+
+    @Test
+    @DisplayName("farthest возвращает одну из станций при равном максимальном расстоянии")
+    void farthestHandlesTies() {
+        Station a = new Station("Далёкая-А", Line.GOMEL_ZHLOBIN, StationType.INTERMEDIATE, 300);
+        Station b = new Station("Далёкая-Б", Line.GOMEL_ZHLOBIN, StationType.INTERMEDIATE, 300);
+        Station near = new Station("Близкая", Line.GOMEL_ZHLOBIN, StationType.INTERMEDIATE, 10);
+        StationRegistry tieRegistry = new StationRegistry(List.of(a, b, near));
+
+        Station farthest = tieRegistry.farthest().orElseThrow();
+        assertEquals(300, farthest.distanceFromGomelKm());
+        assertTrue(farthest.equals(a) || farthest.equals(b));
+    }
+
+    @Test
+    @DisplayName("farthest всегда возвращает непустой Optional для непустого справочника")
+    void farthestReturnsPresentForNonEmptyRegistry() {
+        assertTrue(registry.farthest().isPresent());
+    }
 
 }
 
