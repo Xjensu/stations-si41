@@ -138,12 +138,14 @@ class StationRegistryTest {
         assertEquals(113, rogachev.distanceFromGomelKm());
     }
     
-    
-
     @Test
     @DisplayName("farthest возвращает станцию с максимальным расстоянием от Гомеля")
     void farthestReturnsMostDistantStation() {
-        assertEquals("Словечно", registry.farthest().orElseThrow().name());
+        int maxDistance = registry.all().stream()
+                .mapToInt(Station::distanceFromGomelKm)
+                .max()
+                .orElseThrow();
+        assertEquals(maxDistance, registry.farthest().orElseThrow().distanceFromGomelKm());
     }
 
     @Test
@@ -415,6 +417,15 @@ class StationRegistryTest {
     void sortedByDistanceReturnsEmptyForEmptyRegistry() {
         StationRegistry emptyRegistry = new StationRegistry(java.util.List.of());
         assertTrue(emptyRegistry.sortedByDistance().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Справочник содержит станцию Житковичи с корректными атрибутами")
+    void containsZhitkovichi() {
+        Station zhitkovichi = station("Житковичи");
+        assertEquals(Line.LUNINETS_KALINKOVICHI, zhitkovichi.line());
+        assertEquals(StationType.INTERMEDIATE, zhitkovichi.type());
+        assertEquals(215, zhitkovichi.distanceFromGomelKm());
     }
 
 
