@@ -125,12 +125,6 @@ public final class StationRegistry {
                 .sorted()
                 .toList();
     }
-    public List<Station> sortedByDistance() {
-     return stations.stream()
-             .sorted(Comparator.comparingInt(Station::distanceFromGomelKm)
-                     .thenComparing(Station::name))
-             .toList();
-    }
       
     /** Возвращает станции по расстоянию, при равенстве — по наименованию. */
     public List<Station> sortedByDistance() {
