@@ -464,6 +464,15 @@ class StationRegistryTest {
     void farthestReturnsPresentForNonEmptyRegistry() {
         assertTrue(registry.farthest().isPresent());
     }
-
+  
+    @Test
+    @DisplayName("Добруш: Брянское направление, грузовая станция, 25 км от Гомеля")
+    void containsDobrush() {
+        Station dobrush = station("Добруш");
+        assertEquals("Добруш", dobrush.name());
+        assertEquals(Line.GOMEL_BRYANSK, dobrush.line());
+        assertEquals(StationType.FREIGHT, dobrush.type());
+        assertEquals(25, dobrush.distanceFromGomelKm());
+    }
 }
 
