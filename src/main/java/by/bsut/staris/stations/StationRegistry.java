@@ -130,7 +130,7 @@ public final class StationRegistry {
              .sorted(Comparator.comparingInt(Station::distanceFromGomelKm)
                      .thenComparing(Station::name))
              .toList();
-      
+    }
       
     /** Возвращает станции по расстоянию, при равенстве — по наименованию. */
     public List<Station> sortedByDistance() {
@@ -139,5 +139,4 @@ public final class StationRegistry {
                         .thenComparing(Station::name))
                 .toList();
     }
- }
 }
